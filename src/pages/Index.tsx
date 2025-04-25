@@ -5,13 +5,16 @@ import TransactionStats from "@/components/TransactionStats";
 import TransactionTable from "@/components/TransactionTable";
 import FraudDetectionChart from "@/components/FraudDetectionChart";
 import AlertPanel from "@/components/AlertPanel";
-import { mockTransactions, mockDailyStats, aggregateStats } from "@/utils/mockData";
+import TransactionInput from "@/components/TransactionInput";
+import { mockTransactions, mockDailyStats, aggregateStats as initialAggregateStats, Transaction } from "@/utils/mockData";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { ShieldCheck } from "lucide-react";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
+  const [aggregateStats, setAggregateStats] = useState(initialAggregateStats);
 
   // Simulate loading state for demonstration
   useEffect(() => {
@@ -21,6 +24,31 @@ const Index = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleNewTransaction = (amount: number) => {
+    const newTransaction: Transaction = {
+      id: `txn_${Math.random().toString(36).substring(2, 10)}`,
+      amount,
+      date: new Date().toISOString(),
+      merchant: "Manual Entry",
+      location: "Web Interface",
+      status: "completed",
+      type: "card",
+      riskScore: amount > 1000 ? 85 : amount > 500 ? 65 : amount > 250 ? 45 : 25,
+      flagged: amount > 1000,
+      anomalyDetails: amount > 1000 ? ["Amount significantly higher than average"] : undefined
+    };
+
+    setTransactions(prev => [newTransaction, ...prev]);
+    
+    // Update aggregate stats
+    setAggregateStats(prev => ({
+      totalTransactions: prev.totalTransactions + 1,
+      flaggedTransactions: prev.flaggedTransactions + (newTransaction.flagged ? 1 : 0),
+      avgRiskScore: Math.round((prev.avgRiskScore * prev.totalTransactions + newTransaction.riskScore) / (prev.totalTransactions + 1)),
+      totalAmount: prev.totalAmount + amount
+    }));
+  };
 
   if (isLoading) {
     return (
@@ -46,6 +74,9 @@ const Index = () => {
       <Header />
 
       <main className="flex-1 container py-6 space-y-6">
+        {/* Transaction Input */}
+        <TransactionInput onNewTransaction={handleNewTransaction} />
+
         {/* Stats Overview */}
         <TransactionStats
           totalTransactions={aggregateStats.totalTransactions}
