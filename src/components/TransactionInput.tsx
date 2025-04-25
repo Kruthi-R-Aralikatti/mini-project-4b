@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { DollarSign } from "lucide-react";
+import { DollarSign, IndianRupee } from "lucide-react";
 import RiskMeter from "./RiskMeter";
 
 interface TransactionInputProps {
@@ -26,7 +25,7 @@ const TransactionInput = ({ onNewTransaction }: TransactionInputProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const numAmount = parseFloat(amount);
+    const numAmount = parseFloat(amount) / 83; // Convert INR to USD for internal processing
     
     if (isNaN(numAmount) || numAmount <= 0) {
       toast({
@@ -71,7 +70,7 @@ const TransactionInput = ({ onNewTransaction }: TransactionInputProps) => {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
-          <DollarSign className="h-5 w-5" />
+          <IndianRupee className="h-5 w-5" />
           New Transaction
         </CardTitle>
       </CardHeader>
@@ -83,7 +82,7 @@ const TransactionInput = ({ onNewTransaction }: TransactionInputProps) => {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="Enter amount"
+                placeholder="Enter amount in ₹"
                 className="w-full"
                 step="0.01"
                 min="0"

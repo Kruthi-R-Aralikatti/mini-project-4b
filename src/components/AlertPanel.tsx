@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShieldAlert } from "lucide-react";
 import { Transaction } from "@/utils/mockData";
@@ -51,7 +50,7 @@ const AlertPanel = ({ transactions }: AlertPanelProps) => {
                     )}
                   </div>
                   <div className="flex flex-col items-end">
-                    <span className="font-bold">${transaction.amount.toFixed(2)}</span>
+                    <span className="font-bold">₹{(transaction.amount * 83).toFixed(2)}</span>
                     <div className="mt-1 flex items-center">
                       <div className={`
                         h-6 w-12 rounded-full flex items-center justify-center text-xs font-bold text-white

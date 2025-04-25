@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Transaction } from "@/utils/mockData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,7 +23,6 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // Filter transactions based on search term
   const filteredTransactions = transactions.filter(
     (transaction) =>
       transaction.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,13 +30,11 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
       transaction.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate pagination
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredTransactions.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Get transaction icon based on type
   const getTransactionIcon = (type: Transaction["type"]) => {
     switch (type) {
       case "card":
@@ -50,7 +46,6 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
     }
   };
 
-  // Get status badge color
   const getStatusBadge = (status: Transaction["status"]) => {
     switch (status) {
       case "completed":
@@ -117,7 +112,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                   </div>
                 </TableCell>
                 <TableCell className="font-medium">
-                  ${transaction.amount.toFixed(2)}
+                  ₹{(transaction.amount * 83).toFixed(2)}
                 </TableCell>
                 <TableCell>
                   <span className={`px-2 py-1 rounded-full text-xs ${getStatusBadge(transaction.status)}`}>
@@ -141,7 +136,6 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
           </TableBody>
         </Table>
         
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm text-gray-500">

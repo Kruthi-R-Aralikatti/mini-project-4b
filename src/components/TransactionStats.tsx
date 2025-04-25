@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShieldCheck, Database, ShieldAlert, DollarSign } from "lucide-react";
+import { ShieldCheck, Database, ShieldAlert, IndianRupee } from "lucide-react";
 
 interface TransactionStatsProps {
   totalTransactions: number;
@@ -74,12 +74,12 @@ const TransactionStats = ({
       <Card className="card-hover">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-            <DollarSign className="mr-2 h-4 w-4 text-trustshield-green" />
+            <IndianRupee className="mr-2 h-4 w-4 text-trustshield-green" />
             Total Volume
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${totalAmount.toLocaleString()}</div>
+          <div className="text-2xl font-bold">₹{(totalAmount * 83).toLocaleString()}</div>
           <p className="text-xs text-muted-foreground mt-1">Processed amount</p>
         </CardContent>
       </Card>
